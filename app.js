@@ -9,8 +9,6 @@ app.use(cors());
 // schema design
 app.use("/api/v1/product", productRoute);
 
-app.post("/api/v1/product");
-app.get("/api/v1/product");
 app.get("/", (req, res) => {
   res.send("Route is working! YaY!");
 });
