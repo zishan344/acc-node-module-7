@@ -8,7 +8,7 @@ exports.createProduct = async (data) => {
   const product = await Product.create(data);
   return product;
 };
-exports.updateProduct = async (productId, data) => {
+exports.updateProductById = async (productId, data) => {
   const product = await updateOne(
     { _id: productId },
     { $set: data },
@@ -28,4 +28,12 @@ exports.bulkUpdate = async (data) => {
   const result = await Promise.all(products);
   console.log(result);
   return products;
+};
+exports.deleteProduct = async (data) => {
+  const product = await Product.deleteOne({ _id: data });
+  return product;
+};
+exports.bulkDelete = async (ids) => {
+  const product = await Product.deleteMany({ _id: ids });
+  return product;
 };

@@ -2,8 +2,11 @@ const Product = require("../models/Product");
 const {
   gettingAllProduct,
   createProduct,
-  updateProduct,
+  updateProductById: updateProduct,
   bulkUpdate,
+  deleteProduct,
+  bulkDeleteProduct,
+  bulkDelete,
 } = require("../product.services/Product.services");
 module.exports.getProduct = async (req, res) => {
   try {
@@ -59,7 +62,7 @@ module.exports.createProducts = async (req, res) => {
     });
   }
 };
-exports.updateProduct = async (req, res) => {
+exports.updateProductById = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -87,6 +90,58 @@ exports.bulkUpdateProduct = async (req, res) => {
     res.status(400).json({
       status: "failed",
       message: "Couldn't update product",
+      error: error.message,
+    });
+  }
+};
+exports.bulkUpdateProduct = async (req, res) => {
+  try {
+    const result = await bulkUpdate(req.body);
+    res.status(200).json({
+      status: "Success",
+      message: "Product update successfully",
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "failed",
+      message: "Couldn't update product",
+      error: error.message,
+    });
+  }
+};
+exports.deleteProductBydId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await deleteProduct(id);
+    if (!result.deletedCount) {
+      return res
+        .status(404)
+        .json({ status: "failed", message: "Couldn't delete product product" });
+    }
+    res.status(200).json({
+      status: "Success",
+      message: "Product delete  successfully",
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "failed",
+      message: "Couldn't delete product product",
+      error: error.message,
+    });
+  }
+};
+
+exports.bulkDeleteProduct = async (req, res) => {
+  try {
+    const result = await bulkDelete(req.body.ids);
+    res.status(200).json({
+      status: "Success",
+      message: "Product delete successfully",
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "failed",
+      message: "Couldn't delete product product",
       error: error.message,
     });
   }
